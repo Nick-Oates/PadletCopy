@@ -380,14 +380,11 @@ script AppDelegate
             for(const postEl of postEls) {
                 const title = postEl.querySelector('[data-cy=postSubject]');
                 
-                console.log('|' + title.innerText + '| >>> |' + postTitle + '|');
                 if(title.innerText === postTitle) {
-                    console.log('found');
                     return postEl.id;
                 }
             }
 
-            console.log('not found');
             document.location.reload();
             return '';
         }
@@ -1008,7 +1005,6 @@ script AppDelegate
         set posts to {}
 
         repeat with pData in postList
-            log pData
             set pst to createPost(pData)
             set the end of posts to pst
         end repeat
@@ -1204,7 +1200,6 @@ script AppDelegate
     end fetchPostIds
     
     on activateEdit(doc, postId)
-        log "activateEdit"
         set activateEditAttr to "'" & postId & "'"
         set js to regex change activateEditScript search pattern "@activateEditAttr@" replace template activateEditAttr
         set success to runJavaScript(js, doc, boolean)
@@ -1212,26 +1207,21 @@ script AppDelegate
     end activateEdit
     
     on activateDuplicate(doc)
-        log "activateDuplicate"
         set success to runJavaScript(activateDuplicateScript, doc, boolean)
         return success
     end activateDuplicate
     
     on activateDeletePost(doc)
-        log "activateDeletePost"
         set success to runJavaScript(activateDeleteScript, doc, boolean)
         return success
     end activateDeletePost
     
     on deletePost()
-        log "deletePost"
         set success to runJavaScript(deletePostScript, doc, boolean)
         return success
     end deletePost
     
     on selectTarget(doc)
-        log "selectTarget"
-
         set selectTargetAttr to "'" & targetName & "'"
         set js to regex change selectTargetScript search pattern "@selectTargetAttr@" replace template selectTargetAttr
         set success to runJavaScript(js, doc, boolean)
@@ -1239,8 +1229,6 @@ script AppDelegate
     end selectTarget
     
     on fetchPostId(doc, postTitle)
-        log "getTargetPostId"
-        
         set fetchPostIdAttr to "'" & postTitle & "'"
         set js to regex change fetchPostIdScript search pattern "@fetchPostIdAttr@" replace template fetchPostIdAttr
         set counter to 0
@@ -1259,10 +1247,7 @@ script AppDelegate
     end fetchPostId
     
     on moveResizePost(doc, targetPostId, postRect)
-        log "targetPostId: " & targetPostId
-        log "originalPost: " & postRect's getLeft() & ", " & postRect's getTop() & ", " & postRect's getWidth() & ", " & postRect's getHeight()
         set moveResizePostAttr to "'" & targetPostId & "', " & postRect's getLeft() & ", " & postRect's getTop() & ", " & postRect's getWidth() & ", " & postRect's getHeight()
-        log "moveResizePostAttr: " & moveResizePostAttr
         set js to regex change moveResizePostScript search pattern "@moveResizePostAttr@" replace template moveResizePostAttr
         set theResult to (runJavaScript(js, doc, number)) as integer
         
